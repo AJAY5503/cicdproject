@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    environment {                       
+        IMAGE_NAME = 'jay2277/appimage'  
+        IMAGE_TAG = 'latest'
+    }
+
+    stages {
+        stage('clone_repo') {
+            steps {
+                git 'https://github.com/AJAY5503/cicdproject.git' 
+            }
+        }
+
+        stage('building a docker image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'  
+            }
+        }
+
+        stage('pushing the image to docker hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $IMAGE_NAME:$IMAGE_TAG
+                    '''
+                }
+            }
+        }
+    }
+}
