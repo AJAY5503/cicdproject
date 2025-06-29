@@ -17,4 +17,3 @@ spec:
           image: jay2277/appimage:latest
           ports:
             - containerPort: 5000
-
