@@ -1,22 +1,22 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = 'jay2277/appimage'
+    environment {                       
+        IMAGE_NAME = 'jay2277/appimage'  
         IMAGE_TAG = 'latest'
     }
 
     stages {
         stage('clone_repo') {
             steps {
-                git 'https://github.com/AJAY5503/cicdproject.git'
+                git 'https://github.com/AJAY5503/cicdproject.git' 
             }
         }
 
         stage('building a docker image') {
             steps {
-                dir('app') {
-                    sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                dir('app'){
+                      sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
                 }
             }
         }
@@ -29,10 +29,10 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-creds', variable: 'GITHUB_TOKEN')]) {
                     sh '''
-                        git config user.email "your.email@example.com"
-                        git config user.name "Your Name"
+                        git config user.email "jaykan2280@gmail.com"
+                        git config user.name "AJAY5503"
                         BUILD_NUMBER=${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g app/deployment.yml"
+                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" app/deployment.yml
                         git add app/deployment.yml
                         git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:MASTER
