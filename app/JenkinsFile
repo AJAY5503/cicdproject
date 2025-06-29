@@ -15,7 +15,7 @@ pipeline {
 
         stage('building a docker image') {
             steps {
-                dir('app'){
+                dir('app') {
                     sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
                         BUILD_NUMBER=${BUILD_NUMBER}
                         sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" app/deployment.yml
                         git add app/deployment.yml
-                        git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                        git diff --cached --quiet || git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                         git push https://${GIT_USERNAME}:${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:MASTER
                     '''
                 }
