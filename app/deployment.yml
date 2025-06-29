@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app-container
-          image: jay2277/appimage:replaceImageTag
+          image: jay2277/appimage:13
           ports:
             - containerPort: 5000
 
